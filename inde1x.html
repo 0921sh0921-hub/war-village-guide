@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>راهنمای دهکده جنگ | WarVillage</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdn.fontsource.org/fonts/vazir@5.0.0-alpha.2/css/vazir.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #f0f4f8;
+            --card: #ffffff;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --primary: #3b82f6;
+            --primary-dark: #2563eb;
+            --primary-glow: rgba(59, 130, 246, 0.2);
+            --shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+            --radius: 24px;
+            --transition: 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        body.dark {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --text: #f1f5f9;
+            --text-light: #94a3b8;
+            --shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        body {
+            font-family: 'Vazir', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            transition: background var(--transition), color var(--transition);
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            line-height: 1.8;
+            font-weight: 300;
+        }
+
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            background: var(--card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 30px 28px;
+            transition: background var(--transition), box-shadow var(--transition);
+            animation: fadeIn 0.7s ease;
+            position: relative;
+            min-height: 550px;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(30px) scale(0.97); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 28px;
+            padding-bottom: 18px;
+            border-bottom: 2px solid rgba(59, 130, 246, 0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary), #8b5cf6);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #fff;
+            box-shadow: 0 8px 24px var(--primary-glow);
+            animation: pulseGlow 3s infinite;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 8px 24px var(--primary-glow); }
+            50% { box-shadow: 0 8px 40px var(--primary-glow), 0 0 60px rgba(59, 130, 246, 0.12); }
+        }
+
+        .logo h1 {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            color: var(--text);
+        }
+
+        .logo h1 span {
+            font-size: 18px;
+            font-weight: 400;
+            color: var(--text-light);
+        }
+
+        .logo .subtitle {
+            font-size: 12px;
+            color: var(--text-light);
+            display: block;
+            margin-top: 2px;
+            font-weight: 300;
+        }
+
+        .theme-toggle {
+            background: var(--bg);
+            border: none;
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            font-size: 20px;
+            color: var(--text);
+            cursor: pointer;
+            transition: all var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(30deg) scale(1.08);
+            background: var(--primary);
+            color: #fff;
+        }
+
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 28px;
+            border-bottom: 2px solid rgba(59, 130, 246, 0.08);
+            padding-bottom: 12px;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: all var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+            font-family: 'Vazir', sans-serif;
+        }
+
+        .tab-btn i { font-size: 15px; }
+        .tab-btn:hover { background: var(--bg); color: var(--primary); }
+        .tab-btn.active { background: var(--primary); color: #fff; box-shadow: 0 8px 24px var(--primary-glow); }
+
+        .panel { display: none; animation: slideUp 0.4s ease; }
+        .panel.active { display: block; }
+
+        @keyframes slideUp {
+            0% { opacity: 0; transform: translateY(15px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .panel-title {
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .panel-title i { color: var(--primary); font-size: 28px; }
+
+        .panel-desc {
+            color: var(--text-light);
+            margin-bottom: 22px;
+            font-size: 16px;
+            border-right: 4px solid var(--primary);
+            padding-right: 16px;
+            background: rgba(59, 130, 246, 0.04);
+            border-radius: 0 12px 12px 0;
+            padding: 14px 18px;
+            font-weight: 300;
+            line-height: 1.9;
+        }
+
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+            gap: 16px;
+            margin-top: 10px;
+        }
+
+        .item-btn {
+            background: var(--bg);
+            border: 1px solid transparent;
+            border-radius: 18px;
+            padding: 18px 16px;
+            cursor: pointer;
+            transition: all var(--transition);
+            text-align: right;
+            font-family: 'Vazir', sans-serif;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .item-btn:hover {
+            transform: translateY(-3px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 28px rgba(59, 130, 246, 0.06);
+            background: rgba(59, 130, 246, 0.04);
+        }
+
+        .item-btn .icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), #8b5cf6);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: #fff;
+            flex-shrink: 0;
+            box-shadow: 0 6px 18px var(--primary-glow);
+        }
+
+        .item-btn .info { flex: 1; }
+        .item-btn .info h4 { font-size: 16px; font-weight: 600; margin-bottom: 2px; }
+        .item-btn .info p { font-size: 13px; color: var(--text-light); font-weight: 300; }
+
+        .detail-view { display: none; animation: slideUp 0.4s ease; }
+        .detail-view.active { display: block; }
+
+        .detail-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 16px;
+            padding-bottom: 14px;
+            border-bottom: 2px solid rgba(59, 130, 246, 0.08);
+        }
+
+        .back-btn {
+            background: var(--bg);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text);
+            cursor: pointer;
+            transition: all var(--transition);
+            font-family: 'Vazir', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .back-btn:hover { background: var(--primary); color: #fff; box-shadow: 0 8px 24px var(--primary-glow); }
+
+        .detail-title {
+            font-size: 24px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .detail-title i { color: var(--primary); }
+
+        .detail-description {
+            background: rgba(59, 130, 246, 0.04);
+            border-radius: 16px;
+            padding: 18px 20px;
+            margin-bottom: 22px;
+            border-right: 4px solid var(--primary);
+            color: var(--text);
+            font-weight: 300;
+            line-height: 2;
+            font-size: 16px;
+        }
+
+        .detail-commands { display: flex; flex-direction: column; gap: 10px; }
+
+        .command-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            background: var(--bg);
+            border-radius: 14px;
+            transition: background var(--transition);
+        }
+        .command-item:hover { background: rgba(59, 130, 246, 0.06); }
+
+        .command-item .cmd-badge {
+            font-family: 'Courier New', monospace;
+            font-weight: 700;
+            color: var(--primary);
+            background: rgba(59, 130, 246, 0.1);
+            padding: 4px 16px;
+            border-radius: 30px;
+            font-size: 14px;
+            letter-spacing: 0.3px;
+        }
+        .command-item .cmd-desc { color: var(--text-light); font-size: 14px; font-weight: 300; }
+
+        .special-ranking {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(139, 92, 246, 0.08));
+            border-radius: 18px;
+            padding: 20px 24px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(59, 130, 246, 0.15);
+        }
+
+        .special-ranking h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .special-ranking h3 i { color: var(--primary); }
+
+        .special-ranking ul {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px 20px;
+        }
+        .special-ranking ul li {
+            padding: 4px 0;
+            font-size: 14px;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .special-ranking ul li i { color: var(--primary); font-size: 12px; width: 16px; }
+
+        .footer-custom {
+            margin-top: 30px;
+            text-align: center;
+            color: var(--text-light);
+            font-size: 14px;
+            border-top: 1px solid rgba(59, 130, 246, 0.08);
+            padding-top: 16px;
+            font-weight: 400;
+        }
+
+        .footer-custom i {
+            color: #e74c3c;
+        }
+
+        .footer-custom strong {
+            color: var(--primary);
+        }
+
+        @media (max-width: 640px) {
+            .container { padding: 20px 14px; }
+            .logo h1 { font-size: 18px; }
+            .logo h1 span { font-size: 14px; }
+            .tab-btn { font-size: 13px; padding: 8px 14px; }
+            .items-grid { grid-template-columns: 1fr; }
+            .panel-title { font-size: 22px; }
+            .detail-title { font-size: 20px; }
+            .command-item { flex-direction: column; align-items: flex-start; gap: 6px; }
+            .special-ranking ul { grid-template-columns: 1fr; }
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container" id="app">
+
+        <!-- ===== HEADER جدید ===== -->
+        <header class="header">
+            <div class="logo">
+                <div class="logo-icon"><i class="fas fa-robot"></i></div>
+                <div>
+                    <h1>ربات دهکده جنگ <span>| WarVillage</span></h1>
+                    <span class="subtitle">راهنمای جامع بازی جنگ قبایل</span>
+                </div>
+            </div>
+            <button class="theme-toggle" id="themeToggle"><i class="fas fa-moon"></i></button>
+        </header>
+
+        <!-- ===== تب‌ها ===== -->
+        <nav class="tabs" id="tabContainer">
+            <button class="tab-btn active" data-panel="panel-village"><i class="fas fa-home"></i> دهکده</button>
+            <button class="tab-btn" data-panel="panel-clan"><i class="fas fa-users"></i> قبیله</button>
+            <button class="tab-btn" data-panel="panel-attack"><i class="fas fa-crosshairs"></i> حمله</button>
+            <button class="tab-btn" data-panel="panel-dragon"><i class="fas fa-dragon"></i> اژدها</button>
+            <button class="tab-btn" data-panel="panel-boss"><i class="fas fa-skull"></i> باس</button>
+            <button class="tab-btn" data-panel="panel-mine"><i class="fas fa-hammer"></i> معدن</button>
+            <button class="tab-btn" data-panel="panel-farm"><i class="fas fa-seedling"></i> مزرعه</button>
+            <button class="tab-btn" data-panel="panel-shop"><i class="fas fa-store"></i> فروشگاه</button>
+            <button class="tab-btn" data-panel="panel-bank"><i class="fas fa-university"></i> بانک</button>
+            <button class="tab-btn" data-panel="panel-hero"><i class="fas fa-crown"></i> قهرمان</button>
+        </nav>
+
+        <!-- ===== پنل‌ها ===== -->
+        <section id="panel-village" class="panel active">
+            <div class="panel-title"><i class="fas fa-home"></i> دهکده</div>
+            <div class="panel-desc">مدیریت دهکده، مشاهده منابع، سربازان، تله‌ها و اطلاعات کلی. همچنین می‌توانید سطح دهکده و آمار خود را ببینید.</div>
+            <div class="items-grid" id="villageGrid"></div>
+        </section>
+
+        <section id="panel-clan" class="panel">
+            <div class="panel-title"><i class="fas fa-users"></i> قبیله</div>
+            <div class="panel-desc">ساخت قبیله، عضویت در قبایل عمومی یا خصوصی، مدیریت اعضا، لیست انتقام و آمار قبیله.</div>
+            <div class="items-grid" id="clanGrid"></div>
+        </section>
+
+        <section id="panel-attack" class="panel">
+            <div class="panel-title"><i class="fas fa-crosshairs"></i> حمله</div>
+            <div class="panel-desc">حمله به دهکده‌های دیگر، دریافت غنیمت (گوشت و چوب) و افزایش جام‌ها. بین هر حمله ۳۰ ثانیه باید صبر کنید.</div>
+            <div class="items-grid" id="attackGrid"></div>
+        </section>
+
+        <section id="panel-dragon" class="panel">
+            <div class="panel-title"><i class="fas fa-dragon"></i> اژدها</div>
+            <div class="panel-desc">مبارزه با اژدهاهای مختلف (آتشین، یخی، صاعقه، گردباد، ترکیبی و...) و دریافت الماس.</div>
+            <div class="items-grid" id="dragonGrid"></div>
+        </section>
+
+        <section id="panel-boss" class="panel">
+            <div class="panel-title"><i class="fas fa-skull"></i> باس‌ها</div>
+            <div class="panel-desc">مبارزه با باس‌های قدرتمند (گرگینه‌ها، غول‌ها، عنکبوت غول‌پیکر و باس ترکیبی نهایی).</div>
+            <div class="items-grid" id="bossGrid"></div>
+        </section>
+
+        <section id="panel-mine" class="panel">
+            <div class="panel-title"><i class="fas fa-hammer"></i> معدن</div>
+            <div class="panel-desc">استخدام معدن‌چی، استخراج الماس، سنگ، طلا و نقره. هر معدن‌چی ۵۰ الماس هزینه دارد و حداکثر ۱٬۲۵۶ نفر.</div>
+            <div class="items-grid" id="mineGrid"></div>
+        </section>
+
+        <section id="panel-farm" class="panel">
+            <div class="panel-title"><i class="fas fa-seedling"></i> مزرعه</div>
+            <div class="panel-desc">تولید خودکار گوشت و چوب. هر سطح سرعت و ظرفیت بیشتری دارد. هزینه ارتقا = ۱ × ۲^(سطح-۱).</div>
+            <div class="items-grid" id="farmGrid"></div>
+        </section>
+
+        <section id="panel-shop" class="panel">
+            <div class="panel-title"><i class="fas fa-store"></i> فروشگاه</div>
+            <div class="panel-desc">خرید چوب و گوشت با الماس. هر ۱ الماس = ۷۰۰,۰۰۰ واحد. همچنین خرید کاروان اهدا با ۷,۵۰۰ الماس.</div>
+            <div class="items-grid" id="shopGrid"></div>
+        </section>
+
+        <section id="panel-bank" class="panel">
+            <div class="panel-title"><i class="fas fa-university"></i> بانک</div>
+            <div class="panel-desc">واریز و برداشت الماس با سود روزانه ۲۰٪. حداکثر موجودی ۳۰۰,۰۰۰ الماس. حداقل واریز/برداشت ۱۰۰ الماس.</div>
+            <div class="items-grid" id="bankGrid"></div>
+        </section>
+
+        <section id="panel-hero" class="panel">
+            <div class="panel-title"><i class="fas fa-crown"></i> قهرمان</div>
+            <div class="panel-desc">استخدام قهرمان (رستم، اسفندیار، گردآفرید) برای نبرد با اساطیر. هزینه هر قهرمان ۲۰,۰۰۰ الماس، تعویض ۲,۰۰۰ الماس.</div>
+            <div class="items-grid" id="heroGrid"></div>
+        </section>
+
+        <!-- ===== نمای جزئیات ===== -->
+        <div class="detail-view" id="detailView">
+            <div class="detail-header">
+                <button class="back-btn" id="backToPanel"><i class="fas fa-arrow-right"></i> بازگشت</button>
+                <div class="detail-title"><i class="fas fa-info-circle" id="detailIcon"></i> <span id="detailTitle">عنوان</span></div>
+            </div>
+            <div class="detail-description" id="detailDescription">توضیحات کامل این بخش در اینجا نمایش داده می‌شود.</div>
+            <div class="detail-commands" id="detailCommands"></div>
+        </div>
+
+        <!-- ===== FOOTER جدید ===== -->
+        <footer class="footer-custom">
+            <i class="fas fa-heart"></i> ساخته شده با عشق توسط <strong>SSC Group</strong>
+        </footer>
+    </div>
+
+    <script>
+        // ============================================================
+        //  داده‌های ربات تست برترین ها.py
+        // ============================================================
+        const SECTION_DATA = {
+            village: {
+                items: [
+                    { id: 'profile', icon: 'fa-user-circle', title: 'دهکده من',
+                      description: '🏘 مشاهده اطلاعات کامل دهکده شامل نام، سطح، قبیله، قهرمان، جام‌ها، الماس، طلا، نقره، سنگ، گوشت، چوب، سربازان، تله‌ها، معدن‌چی‌ها، تلفات، قتل‌ها، اژدهای شکار شده، باس‌ها، اساطیر و کد دعوت.',
+                      commands: [{ cmd: '🏘 دهکده من', desc: 'نمایش اطلاعات دهکده با عکس' }] },
+                    { id: 'ranking', icon: 'fa-trophy', title: 'برترین‌ها',
+                      description: '🏆 مشاهده رتبه‌بندی دهکده‌ها در ۸ دسته: جام‌ها، سربازان، قتل‌ها، الماس، تلفات، اژدها، باس‌ها و اساطیر.',
+                      commands: [{ cmd: '🏆 برترین ها', desc: 'مشاهده رتبه‌بندی کامل' }] },
+                    { id: 'stats', icon: 'fa-chart-bar', title: 'آمار من',
+                      description: '📊 نمایش آمار کامل کاربر شامل کل قتل‌ها، تلفات، جام‌ها، اژدهای کشته شده، باس‌ها و اساطیر.',
+                      commands: [{ cmd: '📊 آمار من', desc: 'مشاهده آمار کامل' }] },
+                    { id: 'convert', icon: 'fa-exchange-alt', title: 'تبدیل منابع',
+                      description: '🔄 تبدیل طلا، سنگ و نقره به الماس بر اساس نرخ بازار. هر ۱۰۰۰ واحد = نرخ فعلی بازار.',
+                      commands: [{ cmd: 'تبدیل طلا [تعداد]', desc: 'تبدیل طلا به الماس' }, { cmd: 'تبدیل سنگ [تعداد]', desc: 'تبدیل سنگ به الماس' }, { cmd: 'تبدیل نقره [تعداد]', desc: 'تبدیل نقره به الماس' }] },
+                    { id: 'convoy', icon: 'fa-truck', title: 'کاروان اهدا',
+                      description: '📦 ارسال منابع به دهکده‌های دیگر. روزانه ۳ بار، هر بار حداکثر ۴۰۰ الماس، ۱ میلیارد گوشت و ۱ میلیارد چوب. کارمزد ۵٪ و زمان ارسال ۱ تا ۶ دقیقه.',
+                      commands: [{ cmd: '📦 کاروان اهدا', desc: 'شروع ارسال کاروان' }] },
+                    { id: 'gift', icon: 'fa-gift', title: 'کد هدیه',
+                      description: '🎁 استفاده از کدهای هدیه برای دریافت الماس، گوشت و چوب. هر کد فقط یک بار قابل استفاده است.',
+                      commands: [{ cmd: '🎁 کد هدیه', desc: 'وارد کردن کد هدیه' }] }
+                ]
+            },
+            clan: {
+                items: [
+                    { id: 'create', icon: 'fa-plus-circle', title: 'ساخت قبیله',
+                      description: '🔨 ساخت قبیله جدید با هزینه ۱۰۰ الماس. نام قبیله باید با حرف انگلیسی شروع شود و بین ۳ تا ۱۵ کاراکتر باشد.',
+                      commands: [{ cmd: '🔨 ساخت قبیله', desc: 'ساخت قبیله جدید' }] },
+                    { id: 'public', icon: 'fa-door-open', title: 'ورود به عمومی',
+                      description: '🚪 عضویت در قبایل عمومی. حداکثر ۱۰ عضو در هر قبیله.',
+                      commands: [{ cmd: '🚪 ورود به قبیله عمومی', desc: 'عضویت در قبیله عمومی' }] },
+                    { id: 'private', icon: 'fa-key', title: 'ورود به خصوصی',
+                      description: '🔑 عضویت در قبایل خصوصی با استفاده از کد دعوت.',
+                      commands: [{ cmd: '🔑 ورود به قبیله خصوصی', desc: 'عضویت با کد دعوت' }] },
+                    { id: 'members', icon: 'fa-list-ul', title: 'لیست اعضا',
+                      description: '📋 مشاهده لیست کامل اعضای قبیله با اطلاعات هر عضو (نام، شناسه، جام‌ها، سربازان، قتل‌ها، تلفات، اژدها).',
+                      commands: [{ cmd: '📋 لیست اعضا', desc: 'مشاهده اعضای قبیله' }] },
+                    { id: 'revenge', icon: 'fa-fist-raised', title: 'انتقام',
+                      description: '⚔️ مشاهده لیست انتقام قبیله و گرفتن انتقام از دهکده‌های مهاجم.',
+                      commands: [{ cmd: '⚔ لیست انتقام', desc: 'مشاهده لیست انتقام' }, { cmd: '⚔ انتقام', desc: 'گرفتن انتقام' }] },
+                    { id: 'settings', icon: 'fa-cog', title: 'تنظیمات قبیله',
+                      description: '⚙️ مدیریت تنظیمات قبیله شامل: تغییر نوع (عمومی/خصوصی)، کد دعوت، حذف قبیله و اخراج اعضا (فقط سازنده).',
+                      commands: [{ cmd: '⚙️ تنظیمات قبیله', desc: 'مدیریت تنظیمات' }] }
+                ]
+            },
+            attack: {
+                items: [
+                    { id: 'attack', icon: 'fa-crosshairs', title: 'حمله',
+                      description: '⚔️ حمله به دهکده‌های تصادفی. بین هر حمله ۳۰ ثانیه فاصله لازم است. با حمله می‌توانید گوشت، چوب و جام دریافت کنید.',
+                      commands: [{ cmd: '⚔️ حمله', desc: 'شروع حمله' }] },
+                    { id: 'shield', icon: 'fa-shield-alt', title: 'سپر',
+                      description: '🛡 فعال‌سازی سپر برای محافظت از دهکده. گزینه‌های ۱۵ دقیقه تا ۳۲ ساعت با هزینه‌های مختلف (۱۰ تا ۱,۲۸۰ الماس).',
+                      commands: [{ cmd: '🛡 سپر', desc: 'مدیریت سپر' }] }
+                ]
+            },
+            dragon: {
+                items: [
+                    { id: 'fire', icon: 'fa-fire', title: 'اژدهای آتشین',
+                      description: '🐉 سرباز مورد نیاز: ۹۰,۰۰۰ | جایزه: ۱۰۰ الماس | شانس: ۸۰٪',
+                      commands: [{ cmd: '🐉 اژدها', desc: 'مبارزه با اژدهای تصادفی' }] },
+                    { id: 'ice', icon: 'fa-snowflake', title: 'اژدهای یخی',
+                      description: '🐉 سرباز مورد نیاز: ۱۱۰,۰۰۰ | جایزه: ۲۰۰ الماس | شانس: ۷۰٪',
+                      commands: [{ cmd: '🐉 اژدها', desc: 'مبارزه با اژدهای تصادفی' }] },
+                    { id: 'thunder', icon: 'fa-bolt', title: 'اژدهای صاعقه',
+                      description: '🐉 سرباز مورد نیاز: ۱۵۰,۰۰۰ | جایزه: ۳۰۰ الماس | شانس: ۶۰٪',
+                      commands: [{ cmd: '🐉 اژدها', desc: 'مبارزه با اژدهای تصادفی' }] },
+                    { id: 'tornado', icon: 'fa-wind', title: 'اژدهای گردباد',
+                      description: '🐉 سرباز مورد نیاز: ۵۰۰,۰۰۰ | جایزه: ۱,۰۰۰ الماس | شانس: ۲۰٪',
+                      commands: [{ cmd: '🐉 اژدها', desc: 'مبارزه با اژدهای تصادفی' }] },
+                    { id: 'invisible', icon: 'fa-eye-slash', title: 'اژدهای نامرئی',
+                      description: '🐉 سرباز مورد نیاز: ۴۰,۰۰۰ | جایزه: ۷۵۰ الماس | شانس: ۲۵٪',
+                      commands: [{ cmd: '🐉 اژدها', desc: 'مبارزه با اژدهای تصادفی' }] },
+                    { id: 'skeleton', icon: 'fa-skull', title: 'اژدهای اسکلتی',
+                      description: '🐉 سرباز مورد نیاز: ۵۰,۰۰۰ | جایزه: ۲۵۰ الماس | شانس: ۷۵٪',
+                      commands: [{ cmd: '🐉 اژدها', desc: 'مبارزه با اژدهای تصادفی' }] },
+                    { id: 'total', icon: 'fa-dragon', title: 'اژدهای ترکیبی',
+                      description: '🐉 سرباز مورد نیاز: ۵۰,۰۰۰,۰۰۰ | جایزه: ۱۰,۰۰۰ الماس | شانس: ۲٪',
+                      commands: [{ cmd: '🐉 اژدها', desc: 'مبارزه با اژدهای تصادفی' }] }
+                ]
+            },
+            boss: {
+                items: [
+                    { id: 'werewolf_ice', icon: 'fa-wolf-pack', title: 'گرگینه یخی',
+                      description: '🐺 سرباز مورد نیاز: ۷۵۰,۰۰۰ | جایزه: ۷۵۰ الماس | شانس: ۵۰٪',
+                      commands: [{ cmd: '👾 باس', desc: 'نبرد با باس تصادفی' }] },
+                    { id: 'werewolf_fire', icon: 'fa-wolf-pack', title: 'گرگینه آتشین',
+                      description: '🐺 سرباز مورد نیاز: ۵۰۰,۰۰۰ | جایزه: ۴۰۰ الماس | شانس: ۶۰٪',
+                      commands: [{ cmd: '👾 باس', desc: 'نبرد با باس تصادفی' }] },
+                    { id: 'werewolf_thunder', icon: 'fa-wolf-pack', title: 'گرگینه صاعقه',
+                      description: '🐺 سرباز مورد نیاز: ۱,۰۰۰,۰۰۰ | جایزه: ۸۰۰ الماس | شانس: ۳۰٪',
+                      commands: [{ cmd: '👾 باس', desc: 'نبرد با باس تصادفی' }] },
+                    { id: 'werewolf_total', icon: 'fa-wolf-pack', title: 'گرگینه ترکیبی',
+                      description: '🐺 سرباز مورد نیاز: ۲۵,۰۰۰,۰۰۰ | جایزه: ۱,۰۰۰ الماس | شانس: ۱۰٪',
+                      commands: [{ cmd: '👾 باس', desc: 'نبرد با باس تصادفی' }] },
+                    { id: 'giant_fire', icon: 'fa-ghost', title: 'غول آتشین',
+                      description: '👹 سرباز مورد نیاز: ۲۵۰,۰۰۰ | جایزه: ۴۰۰ الماس | شانس: ۷۵٪',
+                      commands: [{ cmd: '👾 باس', desc: 'نبرد با باس تصادفی' }] },
+                    { id: 'giant_ice', icon: 'fa-ghost', title: 'غول یخی',
+                      description: '👹 سرباز مورد نیاز: ۶۰۰,۰۰۰ | جایزه: ۶۰۰ الماس | شانس: ۵۰٪',
+                      commands: [{ cmd: '👾 باس', desc: 'نبرد با باس تصادفی' }] },
+                    { id: 'giant_thunder', icon: 'fa-ghost', title: 'غول صاعقه',
+                      description: '👹 سرباز مورد نیاز: ۲,۰۰۰,۰۰۰ | جایزه: ۷۵۰ الماس | شانس: ۲۵٪',
+                      commands: [{ cmd: '👾 باس', desc: 'نبرد با باس تصادفی' }] },
+                    { id: 'spider', icon: 'fa-spider', title: 'عنکبوت غول‌پیکر',
+                      description: '🕷️ سرباز مورد نیاز: ۵,۰۰۰,۰۰۰ | جایزه: ۹۰۰ الماس | شانس: ۳۰٪',
+                      commands: [{ cmd: '👾 باس', desc: 'نبرد با باس تصادفی' }] },
+                    { id: 'boss_total', icon: 'fa-skull-crossbones', title: 'باس ترکیبی نهایی',
+                      description: '👾 سرباز مورد نیاز: ۱,۰۰۰,۰۰۰,۰۰۰ | جایزه: ۷,۵۰۰ الماس | شانس: ۱٪',
+                      commands: [{ cmd: '👾 باس', desc: 'نبرد با باس تصادفی' }] }
+                ]
+            },
+            mine: {
+                items: [
+                    { id: 'mine_start', icon: 'fa-play', title: 'شروع استخراج',
+                      description: '⛏️ شروع استخراج با معدن‌چی‌های موجود. زمان استخراج ۴۵ دقیقه تا ۴ ساعت (تصادفی).',
+                      commands: [{ cmd: '⛏️ معدن', desc: 'مدیریت معدن' }] },
+                    { id: 'mine_hire', icon: 'fa-user-plus', title: 'استخدام معدن‌چی',
+                      description: '👷 استخدام معدن‌چی با هزینه ۵۰ الماس. حداکثر ۱,۲۵۶ معدن‌چی.',
+                      commands: [{ cmd: '⛏️ معدن', desc: 'مدیریت معدن' }] },
+                    { id: 'mine_rewards', icon: 'fa-gem', title: 'جوایز استخراج',
+                      description: '💎 هر معدن‌چی: ۷۵-۱۲۵ الماس، ۲,۰۰۰-۳,۵۰۰ سنگ، ۵۰۰-۱,۲۵۰ طلا، ۱,۵۰۰-۲,۷۵۰ نقره.',
+                      commands: [{ cmd: '⛏️ معدن', desc: 'مدیریت معدن' }] }
+                ]
+            },
+            farm: {
+                items: [
+                    { id: 'farm_start', icon: 'fa-play', title: 'شروع تولید',
+                      description: '🌱 شروع تولید خودکار گوشت و چوب. سرعت = ۲۰۰ × ۲^(سطح-۱)، ظرفیت = ۱,۰۰۰,۰۰۰ × ۲^(سطح-۱).',
+                      commands: [{ cmd: '🌾 مزرعه', desc: 'مدیریت مزرعه' }] },
+                    { id: 'farm_upgrade', icon: 'fa-arrow-up', title: 'ارتقا مزرعه',
+                      description: '⬆️ هزینه ارتقا = ۱ × ۲^(سطح-۱). هر سطح سرعت و ظرفیت را دو برابر می‌کند.',
+                      commands: [{ cmd: '🌾 مزرعه', desc: 'مدیریت مزرعه' }] }
+                ]
+            },
+            shop: {
+                items: [
+                    { id: 'wood_shop', icon: 'fa-tree', title: 'خرید چوب',
+                      description: '🪵 هر ۱ الماس = ۷۰۰,۰۰۰ چوب. گزینه‌های ۱ تا ۱۰,۰۰۰ الماس.',
+                      commands: [{ cmd: '🛒 فروشگاه', desc: 'باز کردن فروشگاه' }] },
+                    { id: 'meat_shop', icon: 'fa-drumstick', title: 'خرید گوشت',
+                      description: '🥩 هر ۱ الماس = ۷۰۰,۰۰۰ گوشت. گزینه‌های ۱ تا ۱۰,۰۰۰ الماس.',
+                      commands: [{ cmd: '🛒 فروشگاه', desc: 'باز کردن فروشگاه' }] },
+                    { id: 'convoy_shop', icon: 'fa-truck', title: 'خرید کاروان',
+                      description: '📦 خرید کاروان اهدا با ۷,۵۰۰ الماس. روزانه ۳ بار قابل استفاده.',
+                      commands: [{ cmd: '🛒 فروشگاه', desc: 'باز کردن فروشگاه' }] }
+                ]
+            },
+            bank: {
+                items: [
+                    { id: 'bank_deposit', icon: 'fa-arrow-down', title: 'واریز به بانک',
+                      description: '💰 واریز الماس به بانک. حداقل ۱۰۰ الماس، حداکثر موجودی ۳۰۰,۰۰۰ الماس. سود روزانه ۲۰٪.',
+                      commands: [{ cmd: '🏦 بانک', desc: 'مدیریت بانک' }] },
+                    { id: 'bank_withdraw', icon: 'fa-arrow-up', title: 'برداشت از بانک',
+                      description: '🏦 برداشت الماس از بانک. حداقل ۱۰۰ الماس.',
+                      commands: [{ cmd: '🏦 بانک', desc: 'مدیریت بانک' }] },
+                    { id: 'bank_interest', icon: 'fa-percent', title: 'سود روزانه',
+                      description: '📈 سود ۲۰٪ روزانه. هر روز ساعت ۰۰:۰۰ محاسبه و به حساب اضافه می‌شود.',
+                      commands: [{ cmd: '🏦 بانک', desc: 'مدیریت بانک' }] }
+                ]
+            },
+            hero: {
+                items: [
+                    { id: 'hero_rostam', icon: 'fa-user-ninja', title: 'رستم',
+                      description: '⚔️ قهرمان سواره نظام. هزینه: ۲۰,۰۰۰ الماس. خون پایه: ۲,۰۰۰.',
+                      commands: [{ cmd: '👑 قهرمان', desc: 'مدیریت قهرمان' }] },
+                    { id: 'hero_esfandiar', icon: 'fa-shield-alt', title: 'اسفندیار',
+                      description: '🛡️ قهرمان رویین تن. هزینه: ۲۰,۰۰۰ الماس. خون پایه: ۲,۰۰۰.',
+                      commands: [{ cmd: '👑 قهرمان', desc: 'مدیریت قهرمان' }] },
+                    { id: 'hero_gordafarid', icon: 'fa-bow-arrow', title: 'گردآفرید',
+                      description: '🏹 قهرمان شجاعت. هزینه: ۲۰,۰۰۰ الماس. خون پایه: ۲,۰۰۰.',
+                      commands: [{ cmd: '👑 قهرمان', desc: 'مدیریت قهرمان' }] },
+                    { id: 'hero_mythical', icon: 'fa-dragon', title: 'نبرد با اساطیر',
+                      description: '⚡ نیاز به قهرمان دارد. اساطیر شامل: دیو سفید، ضحاک، زال، سیمرغ، رخش، هما، اکوان دیو، آپوش، شیردال، گاو برمایه.',
+                      commands: [{ cmd: '⚡ اساطیر', desc: 'نبرد با اساطیر' }] }
+                ]
+            }
+        };
+
+        // ============================================================
+        //  رندر کردن آیتم‌ها
+        // ============================================================
+        function renderItems(containerId, items) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            container.innerHTML = items.map(item => `
+                <button class="item-btn" data-section="${containerId.replace('Grid','')}" data-id="${item.id}">
+                    <div class="icon"><i class="fas ${item.icon}"></i></div>
+                    <div class="info">
+                        <h4>${item.title}</h4>
+                        <p>${item.description.substring(0, 55)}...</p>
+                    </div>
+                </button>
+            `).join('');
+        }
+
+        renderItems('villageGrid', SECTION_DATA.village.items);
+        renderItems('clanGrid', SECTION_DATA.clan.items);
+        renderItems('attackGrid', SECTION_DATA.attack.items);
+        renderItems('dragonGrid', SECTION_DATA.dragon.items);
+        renderItems('bossGrid', SECTION_DATA.boss.items);
+        renderItems('mineGrid', SECTION_DATA.mine.items);
+        renderItems('farmGrid', SECTION_DATA.farm.items);
+        renderItems('shopGrid', SECTION_DATA.shop.items);
+        renderItems('bankGrid', SECTION_DATA.bank.items);
+        renderItems('heroGrid', SECTION_DATA.hero.items);
+
+        // ============================================================
+        //  نمایش جزئیات
+        // ============================================================
+        const detailView = document.getElementById('detailView');
+        const detailIcon = document.getElementById('detailIcon');
+        const detailTitle = document.getElementById('detailTitle');
+        const detailDescription = document.getElementById('detailDescription');
+        const detailCommands = document.getElementById('detailCommands');
+        const backBtn = document.getElementById('backToPanel');
+
+        function showDetail(sectionKey, itemId) {
+            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+            detailView.classList.add('active');
+            const section = SECTION_DATA[sectionKey];
+            if (!section) return;
+            const item = section.items.find(i => i.id === itemId);
+            if (!item) return;
+
+            detailIcon.className = `fas ${item.icon}`;
+            detailTitle.textContent = item.title;
+            detailDescription.textContent = item.description;
+            detailCommands.innerHTML = item.commands.map(cmd => `
+                <div class="command-item">
+                    <span class="cmd-badge">${cmd.cmd}</span>
+                    <span class="cmd-desc">${cmd.desc}</span>
+                </div>
+            `).join('');
+        }
+
+        function backToPanel() {
+            detailView.classList.remove('active');
+            const activeTab = document.querySelector('.tab-btn.active');
+            if (activeTab) {
+                const panelId = activeTab.dataset.panel;
+                const panel = document.getElementById(panelId);
+                if (panel) panel.classList.add('active');
+            }
+        }
+
+        document.querySelectorAll('.item-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                showDetail(this.dataset.section, this.dataset.id);
+            });
+        });
+
+        backBtn.addEventListener('click', backToPanel);
+
+        // ============================================================
+        //  مدیریت تب‌ها
+        // ============================================================
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const panels = {
+            village: document.getElementById('panel-village'),
+            clan: document.getElementById('panel-clan'),
+            attack: document.getElementById('panel-attack'),
+            dragon: document.getElementById('panel-dragon'),
+            boss: document.getElementById('panel-boss'),
+            mine: document.getElementById('panel-mine'),
+            farm: document.getElementById('panel-farm'),
+            shop: document.getElementById('panel-shop'),
+            bank: document.getElementById('panel-bank'),
+            hero: document.getElementById('panel-hero')
+        };
+
+        tabButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                if (detailView.classList.contains('active')) {
+                    detailView.classList.remove('active');
+                }
+                tabButtons.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                Object.values(panels).forEach(p => p.classList.remove('active'));
+                const panelId = this.dataset.panel.replace('panel-', '');
+                if (panels[panelId]) panels[panelId].classList.add('active');
+            });
+        });
+
+        // ============================================================
+        //  تم (دارک/لایت)
+        // ============================================================
+        const themeToggle = document.getElementById('themeToggle');
+        const icon = themeToggle.querySelector('i');
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark');
+            icon.className = 'fas fa-sun';
+        }
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark');
+            const isDark = document.body.classList.contains('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            icon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+        });
+    </script>
+</body>
+</html>
